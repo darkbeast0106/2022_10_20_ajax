@@ -5,7 +5,6 @@ async function autok_listazasa() {
         const data = await result.json();
         let autok_lista_innerHTML = "";
         data.forEach(auto => {
-            console.log(auto);
             const kartya = `<div class="col-md-4">
                 <div class="card">
                 <div class="card-header">
@@ -32,5 +31,33 @@ async function autok_listazasa() {
             autok_lista_innerHTML += kartya;
         });
         document.getElementById('autok_listaja').innerHTML = autok_lista_innerHTML;
+    }
+}
+
+async function auto_felvetele() {
+    const rendszam = document.getElementById("rendszam_input").value;
+    const marka = document.getElementById("marka_input").value;
+    const modell = document.getElementById("modell_input").value;
+    const gyartas_eve = document.getElementById("gyartas_eve_input").value;
+    const uzemanyag = document.getElementById("uzemanyag_input").value;
+
+    const result = await fetch(url+"/felvesz.php", {
+        method: "POST",
+        body: JSON.stringify({
+            rendszam: rendszam,
+            marka: marka,
+            modell: modell,
+            gyartas_eve: gyartas_eve,
+            uzemanyag: uzemanyag,
+        }),
+        headers: {
+            'Content-Type': "application/json"
+        }
+    });
+    const data = await result.json();
+    if (result.status == 201) {
+        autok_listazasa();
+    } else {
+        alert(data.message);
     }
 }
